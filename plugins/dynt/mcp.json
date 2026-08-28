@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dynt": {
+      "type": "http",
+      "url": "https://api.dynt.ai/mcp"
+    }
+  }
+}

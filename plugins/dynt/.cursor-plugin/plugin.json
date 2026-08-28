@@ -1,0 +1,24 @@
+{
+  "name": "dynt",
+  "displayName": "Dynt",
+  "version": "0.1.0",
+  "description": "Run a company's finances with your agent: Dynt's MCP server plus skills",
+  "author": {
+    "name": "Dynt",
+    "email": "hello@dynt.ai"
+  },
+  "homepage": "https://dynt.ai",
+  "repository": "https://github.com/bpais88/dynt-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "dynt",
+    "finance",
+    "fintech",
+    "accounting",
+    "banking",
+    "mcp",
+    "cursor"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}

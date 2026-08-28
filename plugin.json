@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dynt",
+  "version": "0.1.0",
+  "description": "Run a company's finances with your agent: Dynt's MCP server plus skills for receipts, subscriptions, month-end, cleanup and anomaly triage",
+  "author": { "name": "Dynt", "url": "https://dynt.ai" },
+  "homepage": "https://dynt.ai",
+  "repository": "https://github.com/bpais88/dynt-agent-skills",
+  "license": "MIT",
+  "keywords": ["dynt", "finance", "fintech", "accounting", "banking", "invoices", "expenses", "subscriptions", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "dynt-agent-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent Skills and plugin for Dynt: give Claude Code, Cursor, Codex and custom agents the workflows and the MCP server to run a company's finances",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "generate:tools": "node scripts/generate-tools-reference.mjs",
+    "sync:plugins": "node scripts/sync-plugin-skills.mjs",
+    "validate:skills": "node scripts/validate-skills.mjs",
+    "validate:plugins": "node scripts/sync-plugin-skills.mjs --check",
+    "validate:ci": "npm run validate:skills && npm run validate:plugins"
+  },
+  "devDependencies": {
+    "skills-ref": "0.1.5"
+  }
+}

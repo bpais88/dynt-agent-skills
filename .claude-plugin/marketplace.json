@@ -1,0 +1,15 @@
+{
+  "name": "dynt",
+  "owner": { "name": "Dynt", "email": "hello@dynt.ai" },
+  "metadata": { "description": "Official Dynt plugin for Claude Code", "version": "0.1.0" },
+  "plugins": [
+    {
+      "name": "dynt",
+      "source": "./plugins/dynt",
+      "description": "Run a company's finances with your agent: Dynt's MCP server plus skills for receipts, subscriptions, month-end, cleanup and anomaly triage",
+      "version": "0.1.0",
+      "category": "finance",
+      "tags": ["dynt", "finance", "fintech", "accounting", "banking", "mcp"]
+    }
+  ]
+}

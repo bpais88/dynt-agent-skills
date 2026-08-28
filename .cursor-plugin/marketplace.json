@@ -1,0 +1,6 @@
+{
+  "name": "dynt",
+  "plugins": [
+    { "name": "dynt", "source": "./plugins/dynt", "description": "Run a company's finances with your agent: Dynt's MCP server plus skills", "version": "0.1.0" }
+  ]
+}

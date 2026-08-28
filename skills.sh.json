@@ -1,0 +1,9 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    { "title": "Start here", "description": "The router skill: what Dynt is, how to connect, and which workflow to use.", "skills": ["dynt"] },
+    { "title": "Workflows", "description": "Task-shaped skills that chain Dynt's MCP tools safely.", "skills": ["dynt-receipt-compliance", "dynt-subscription-audit", "dynt-month-end-summary", "dynt-transaction-cleanup", "dynt-anomaly-triage"] },
+    { "title": "Build on Dynt", "description": "For developers building their own agents on Dynt.", "skills": ["dynt-agent-builder"] }
+  ]
+}
