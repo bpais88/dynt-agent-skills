@@ -19,6 +19,15 @@ npx skills add bpais88/dynt-agent-skills            # all skills
 npx skills add bpais88/dynt-agent-skills --skill dynt-receipt-compliance
 ```
 
+Or with the CLI (also gives you every Dynt tool as a command):
+
+```bash
+npm i -g dynt-cli
+dynt mcp --for claude-code cursor codex     # OAuth sign-in on first use
+dynt plugins --for claude-code -y
+dynt skills install
+```
+
 Then ask your agent: **"Get started with Dynt"**.
 
 ## Layout

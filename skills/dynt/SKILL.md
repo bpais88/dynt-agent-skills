@@ -51,7 +51,7 @@ your role (admin / employee / viewer) and permissions (`read`, `write`,
 | know what looks wrong, duplicates, unusual charges | `dynt-anomaly-triage` |
 | build their own agent/integration on Dynt | `dynt-agent-builder` |
 
-Install any of them with `npx skills add bpais88/dynt-agent-skills --skill <name>`.
+Install any of them with `npx skills add bpais88/dynt-agent-skills --skill <name>` or `dynt skills install <name>` (CLI: `npm i -g dynt-cli`).
 
 ## Non-negotiables
 
