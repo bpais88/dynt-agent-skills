@@ -51,6 +51,10 @@ npm run validate:ci      # frontmatter, tool references, skills-ref, plugin drif
 
 Edit only `skills/`; CI fails if `plugins/dynt` is stale.
 
+## Privacy, terms and support
+
+The plugin connects to Dynt's own API (`api.dynt.ai`) over OAuth 2.1; it stores nothing locally except the client's OAuth tokens. What Dynt collects and how long it is kept is described in the [Privacy Policy](https://app.dynt.ai/privacy); use is governed by the [Terms of Service](https://app.dynt.ai/terms). Support: [app.dynt.ai/support](https://app.dynt.ai/support) · hello@dynt.ai. Full agent documentation: [app.dynt.ai/docs/mcp](https://app.dynt.ai/docs/mcp).
+
 ## License
 
 MIT
