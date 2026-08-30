@@ -48,7 +48,7 @@ your role (admin / employee / viewer) and permissions (`read`, `write`,
 | see subscriptions, price increases, cancel/downgrade, save money | `dynt-subscription-audit` |
 | a monthly/period summary, cash in vs out, unpaid & overdue | `dynt-month-end-summary` |
 | categorize transactions, fix merchants, apply suggestions | `dynt-transaction-cleanup` |
-| know what needs attention, where money is leaking, a weekly review | call `list_findings` first when the server offers it (ordered by money at stake, with evidence); then the skill below that matches the finding |
+| know what needs attention, where money is leaking, a weekly review | call `list_findings` first when the server offers it (leaks first, then compliance findings, each by money at stake, with evidence); then the skill below that matches the finding |
 | know what looks wrong, duplicates, unusual charges | `dynt-anomaly-triage` |
 | build their own agent/integration on Dynt | `dynt-agent-builder` |
 
@@ -88,7 +88,7 @@ Install any of them with `npx skills add bpais88/dynt-agent-skills --skill <name
 - Proofs: `list_proofs` · `attach_proof`, `attach_proof_from_email`, `delete_proof` (write)
 - Email (admin + email:read): `search_user_email`, `get_email_attachment`
 - Anomalies: `get_anomaly_summary`, `list_anomalies`
-- Findings (when the server offers them): `list_findings` (read, ordered by money at stake) · `update_finding` (write: snoozed / resolved / not_a_problem — only after the user decided; never mark not_a_problem on your own)
+- Findings (when the server offers them): `list_findings` (read, leaks before compliance findings, each by money at stake) · `update_finding` (write: snoozed / resolved / not_a_problem — only after the user decided; never mark not_a_problem on your own)
 - Suggestions (write): `accept_all_category_suggestions`, `accept_all_merchant_suggestions`
 
 Full inputs and CLI equivalents: `dynt-agent-builder/references/tools.md` (production catalogue) and `dynt-agent-builder/references/gated-tools.md` (tools enabled per environment, such as findings).
