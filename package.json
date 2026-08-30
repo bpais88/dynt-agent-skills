@@ -10,7 +10,8 @@
     "sync:plugins": "node scripts/sync-plugin-skills.mjs",
     "validate:skills": "node scripts/validate-skills.mjs",
     "validate:plugins": "node scripts/sync-plugin-skills.mjs --check",
-    "validate:ci": "npm run validate:skills && npm run validate:plugins"
+    "validate:ci": "npm run validate:skills && npm run validate:plugins",
+    "evals": "node scripts/run-evals.mjs"
   },
   "devDependencies": {
     "skills-ref": "0.1.5"
