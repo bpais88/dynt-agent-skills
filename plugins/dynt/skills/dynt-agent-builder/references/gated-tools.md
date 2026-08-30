@@ -6,20 +6,20 @@ Skills may mention these with the wording "when the server offers it"; check the
 
 | Tool | CLI | Access | Read-only | Destructive | Purpose |
 |---|---|---|---|---|---|
-| `list_findings` | `dynt findings list` | read | yes | no | List what needs the user's attention, ordered by money at stake: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it |
+| `list_findings` | `dynt findings list` | read | yes | no | List what needs the user's attention: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Ordering is leaks first (money to reclaim or stop paying), then compliance findings such as missing receipts, each group by amount at stake — so a later compliance row can be larger than the first leak; lead with the first row. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it |
 | `update_finding` | `dynt findings update` | write | no | no | Record the user's decision on one finding: snoozed (deal with it later, until a date), resolved (handled), or not_a_problem (the detection was wrong here — this teaches the detector for this organization) |
 
 ## Inputs
 
 ### `list_findings`
 
-List what needs the user's attention, ordered by money at stake: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it. Use when the user asks what needs attention, where money is leaking, whether anything is wrong, or for a weekly review — call it first and do not recompute these from list_transactions. Do not use for data-quality anomalies like duplicate merchants (use list_anomalies). Returns open findings by default; expired snoozes count as open.
+List what needs the user's attention: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Ordering is leaks first (money to reclaim or stop paying), then compliance findings such as missing receipts, each group by amount at stake — so a later compliance row can be larger than the first leak; lead with the first row. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it. Use when the user asks what needs attention, where money is leaking, whether anything is wrong, or for a weekly review — call it first and do not recompute these from list_transactions. Do not use for data-quality anomalies like duplicate merchants (use list_anomalies). Returns open findings by default; expired snoozes count as open.
 
 | Input | Type | Required | Description |
 |---|---|---|---|
 | `status` | array of enum(open \| snoozed \| resolved \| not_a_problem) | no | Default: open (including snoozes that have expired). |
-| `type` | array of enum(duplicate_charge \| price_increase \| subscription_stopped \| unused_subscription \| missing_receipt_cluster \| unusual_charge) | no |  |
-| `limit` | integer | no |  |
+| `type` | array of enum(duplicate_charge \| price_increase \| subscription_stopped \| unused_subscription \| missing_receipt_cluster \| unusual_charge) | no | Filter by finding type; omit for all types. |
+| `limit` | integer | no | Maximum findings to return (default 25). |
 
 ### `update_finding`
 
@@ -27,8 +27,8 @@ Record the user's decision on one finding: snoozed (deal with it later, until a 
 
 | Input | Type | Required | Description |
 |---|---|---|---|
-| `findingId` | string | yes |  |
+| `findingId` | string | yes | Finding id from list_findings. |
 | `status` | string (snoozed \| resolved \| not_a_problem) | yes | snoozed = deal with it later (needs snoozedUntil); not_a_problem = the detection was wrong for this organization; resolved = handled. |
 | `snoozedUntil` | string | no | YYYY-MM-DD (a real calendar date), required when status is snoozed |
-| `resolution` | string | no |  |
+| `resolution` | string | no | Short note on what was done; shown in the app's finding history. |
 
