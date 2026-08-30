@@ -23,7 +23,11 @@ submission, so directory reviewers and our evals exercise the same behaviour.
 1. One-time: `claude --plugin-dir plugins/dynt`, then `/mcp` → authenticate `dynt`.
    Sign in as the **demo/reviewer user** (Northwind Coffee B.V. (demo)) so evals never
    touch a real organization.
-2. `npm run evals` (or `node scripts/run-evals.mjs --case 'neg-*' --json results.json`).
+2. `npm run evals`
+
+Give write-heavy cases enough turns: an agent spends its first turns orienting
+(`get_current_user`, a summary, a listing) before it reaches the behaviour under
+test, and a run that hits `max_turns` is scored as a failed run, not a pass. (or `node scripts/run-evals.mjs --case 'neg-*' --json results.json`).
 
 Graders name tools by their bare Dynt name (`list_invoices`); the runner matches the
 `mcp__<plugin>_<server>__` prefix by suffix, and `mcp__*` means any MCP tool. When

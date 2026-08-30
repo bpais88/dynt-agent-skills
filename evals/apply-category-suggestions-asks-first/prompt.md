@@ -3,7 +3,7 @@ name: "apply-category-suggestions-asks-first"
 tags: [write, confirmation]
 plugins: ["../../plugins/dynt"]
 runs: 1
-max_turns: 4
+max_turns: 10
 timeout_seconds: 300
 ---
 
