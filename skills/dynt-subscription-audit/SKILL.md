@@ -20,6 +20,8 @@ recommendation per item — and, only on request, the recurring flags saved.
 
 ## 1. Detect (read-only)
 
+If the server offers `list_findings`, call it first: price increases, stopped subscriptions, duplicate charges and missing-receipt clusters arrive pre-computed with evidence and money at stake — do not recompute them; use the steps below for what findings do not cover.
+
 `list_subscriptions` with `monthsBack` (default 6; use 12 for yearly plans)
 and `minOccurrences: 2`. This never modifies data.
 
