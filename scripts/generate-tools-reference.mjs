@@ -18,6 +18,26 @@ const summaryTable = (tools) => {
   return rows;
 };
 
+/**
+ * Human-readable type for one JSON Schema property, including the allowed
+ * values — for arrays those live under `items`, and an agent that cannot see
+ * them will send rejected calls. Pipes are escaped: an unescaped one ends the
+ * markdown table cell.
+ */
+const typeOf = (p) => {
+  if (!p) return "any";
+  const enums = (e) => e.map(String).join(" \\| ");
+  if (p.type === "array") {
+    const it = p.items ?? {};
+    const inner = it.enum ? `enum(${enums(it.enum)})` : it.type ? typeOf(it) : "any";
+    return `array of ${inner}`;
+  }
+  if (p.enum) return p.type ? `${p.type} (${enums(p.enum)})` : `enum(${enums(p.enum)})`;
+  if (p.type) return p.type;
+  if (p.anyOf) return "mixed";
+  return "any";
+};
+
 /** Full description + argument table per tool; builders rely on this for required inputs. */
 const inputSections = (tools) => {
   const out = ["", "## Inputs", ""];
@@ -29,11 +49,7 @@ const inputSections = (tools) => {
     if (!keys.length) { out.push("_No inputs._", ""); continue; }
     out.push("| Input | Type | Required | Description |", "|---|---|---|---|");
     for (const k of keys) {
-      // Pipes inside a table cell must be escaped or the row stops rendering.
-      const p = props[k];
-      const enums = p.enum ? p.enum.join(" \\| ") : "";
-      const type = p.type ?? (p.enum ? `enum(${enums})` : p.anyOf ? "mixed" : "any");
-      out.push(`| \`${k}\` | ${type}${p.enum && p.type ? ` (${enums})` : ""} | ${req.has(k) ? "yes" : "no"} | ${(p.description ?? "").replace(/\|/g, "\\|")} |`);
+      out.push(`| \`${k}\` | ${typeOf(props[k])} | ${req.has(k) ? "yes" : "no"} | ${(props[k].description ?? "").replace(/\|/g, "\\|")} |`);
     }
     out.push("");
   }
