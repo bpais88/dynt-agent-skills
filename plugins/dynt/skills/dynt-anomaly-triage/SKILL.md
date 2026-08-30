@@ -19,6 +19,8 @@ metadata:
 next step. Read-only.
 
 1. `get_anomaly_summary` → open / acknowledged / resolved counts.
+If the server offers `list_findings`, call it first: price increases, stopped subscriptions, duplicate charges and missing-receipt clusters arrive pre-computed with evidence and money at stake — do not recompute them; use the steps below for what findings do not cover.
+
 2. `list_anomalies` → for each: type, severity, description, affected record.
 3. For suspected double charges, pull the two transactions with
    `list_transactions` (merchantName + a tight date window) and compare amount,
