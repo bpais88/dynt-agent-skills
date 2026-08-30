@@ -60,7 +60,7 @@ List incoming supplier bills with status, vendor, amount, currency and due date.
 
 | Input | Type | Required | Description |
 |---|---|---|---|
-| `status` | string (draft|received|paid|cancelled|overdue|scheduled) | no | Filter by bill status |
+| `status` | string (draft \| received \| paid \| cancelled \| overdue \| scheduled) | no | Filter by bill status |
 | `startDate` | string | no |  |
 | `endDate` | string | no |  |
 | `limit` | integer | no |  |
@@ -91,7 +91,7 @@ List reimbursable employee expenses with status, category, amount, submitter and
 
 | Input | Type | Required | Description |
 |---|---|---|---|
-| `status` | string (pending|processing|reimbursed|cancelled|rejected|draft|sent) | no | Filter by expense status |
+| `status` | string (pending \| processing \| reimbursed \| cancelled \| rejected \| draft \| sent) | no | Filter by expense status |
 | `employeeId` | string | no | Filter by employee/submitter |
 | `limit` | integer | no |  |
 | `cursor` | integer | no |  |
@@ -108,7 +108,7 @@ List outgoing customer invoices with status, customer, amount, currency, issue a
 
 | Input | Type | Required | Description |
 |---|---|---|---|
-| `status` | string (draft|sent|paid|cancelled|overdue|scheduled) | no | Filter by invoice status |
+| `status` | string (draft \| sent \| paid \| cancelled \| overdue \| scheduled) | no | Filter by invoice status |
 | `startDate` | string | no | ISO date - filter by due date |
 | `endDate` | string | no | ISO date - filter by due date |
 | `limit` | integer | no |  |
@@ -228,7 +228,7 @@ List and filter bank transactions: amount, merchant, category, date, account and
 | `endDate` | string | no | ISO date string |
 | `accountId` | string | no | Filter by bank account ID |
 | `merchantName` | string | no | Filter by merchant name (partial match) |
-| `status` | string (needs_review|ready_to_export|synced|not_needed) | no | Accounting status filter |
+| `status` | string (needs_review \| ready_to_export \| synced \| not_needed) | no | Accounting status filter |
 | `minAmount` | number | no | Minimum amount (absolute value) |
 | `maxAmount` | number | no | Maximum amount (absolute value) |
 | `limit` | integer | no | Number of results (max 500) |
