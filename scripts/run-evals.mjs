@@ -62,21 +62,29 @@ function loadCases() {
     });
 }
 
-/** Discover the MCP tool names the plugin exposes (also tells us the prefix). */
+/**
+ * Discover the tool names the plugin's own MCP server exposes. Only tools whose
+ * prefix derives from that server's identity are kept, so tools from any other
+ * MCP server the user has configured are neither allow-listed nor mistaken for
+ * an authenticated Dynt server.
+ */
 function discoverTools() {
-  const r = runClaude("say ok", { maxTurns: 1 });
-  const dynt = r.tools.filter((t) => t.startsWith("mcp__"));
-  const server = r.mcpServers.find((s) => /dynt/i.test(s.name));
-  return { tools: dynt, server };
+  const r = runClaude("say ok", { maxTurns: 1, timeoutSeconds: 120 });
+  if (r.failed) return { tools: [], server: null, error: r.failure };
+  const server = r.mcpServers.find((s) => /^plugin:dynt:/.test(s.name) || s.name === "dynt");
+  if (!server) return { tools: [], server: null, error: "plugin MCP server not present in init message" };
+  const prefix = "mcp__" + server.name.replace(/[^A-Za-z0-9]+/g, "_") + "__";
+  const tools = r.tools.filter((t) => t.startsWith(prefix));
+  return { tools, server, prefix, error: tools.length ? null : `no tools with prefix ${prefix} (status: ${server.status})` };
 }
 
-function runClaude(prompt, { maxTurns, allowedTools = [] }) {
+function runClaude(prompt, { maxTurns, allowedTools = [], timeoutSeconds = 300 }) {
   const argv = ["-p", prompt, "--plugin-dir", pluginDir, "--output-format", "stream-json", "--verbose", "--max-turns", String(maxTurns)];
   if (model) argv.push("--model", model);
   if (allowedTools.length) argv.push("--allowedTools", ...allowedTools);
   const started = Date.now();
-  const res = spawnSync("claude", argv, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
-  const events = res.stdout.split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const res = spawnSync("claude", argv, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, timeout: timeoutSeconds * 1000, killSignal: "SIGKILL" });
+  const events = (res.stdout ?? "").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
   const init = events.find((e) => e.type === "system" && e.subtype === "init") ?? {};
   const toolCalls = [];
   let lastMessage = "";
@@ -89,10 +97,18 @@ function runClaude(prompt, { maxTurns, allowedTools = [] }) {
     }
     if (e.type === "result" && typeof e.result === "string" && e.result) lastMessage = e.result;
   }
-  const result = events.find((e) => e.type === "result") ?? {};
+  const result = events.find((e) => e.type === "result") ?? null;
+  // A run that did not complete cleanly must never be graded as "called no tools".
+  let failure = null;
+  if (res.error?.code === "ETIMEDOUT" || res.signal) failure = `timed out after ${timeoutSeconds}s`;
+  else if (res.error) failure = `could not start claude: ${res.error.message}`;
+  else if (res.status !== 0) failure = `claude exited ${res.status}: ${(res.stderr ?? "").trim().slice(-300)}`;
+  else if (!result) failure = "no result event in stream (empty or malformed output)";
+  else if (result.is_error) failure = `claude reported an error: ${String(result.result ?? "").slice(0, 300)}`;
   return {
+    failed: !!failure, failure,
     tools: init.tools ?? [], mcpServers: init.mcp_servers ?? [], toolCalls, lastMessage,
-    costUsd: result.total_cost_usd ?? null, durationMs: Date.now() - started, stderr: res.stderr,
+    costUsd: result?.total_cost_usd ?? null, durationMs: Date.now() - started, stderr: res.stderr,
     trace: toolCalls.map((c) => JSON.stringify(c)).join("\n"),
   };
 }
@@ -123,16 +139,18 @@ const cases = loadCases();
 if (!cases.length) { console.error("No eval cases found"); process.exit(1); }
 const disc = discoverTools();
 if (!disc.tools.length) {
-  console.error(`Dynt MCP tools not available inside claude -p (server: ${JSON.stringify(disc.server)}).`);
+  console.error(`Dynt MCP tools not available inside claude -p: ${disc.error} (server: ${JSON.stringify(disc.server)}).`);
   console.error(`Authenticate once: claude --plugin-dir plugins/dynt → /mcp → authenticate. Sign in as the demo/reviewer user.`);
   process.exit(2);
 }
-console.error(`Discovered ${disc.tools.length} Dynt tools (prefix ${disc.tools[0].replace(/__[^_]+$/, "__")})`);
+console.error(`Discovered ${disc.tools.length} Dynt tools (prefix ${disc.prefix})`);
 
 const out = { schemaVersion: "local-v1", generatedAt: new Date().toISOString(), cases: [], aggregates: { passCount: 0, failCount: 0, costUsd: 0 } };
 for (const c of cases) {
-  const run = runClaude(c.prompt, { maxTurns: c.fm.max_turns ?? 10, allowedTools: [...disc.tools, "Skill"] });
-  const graders = c.graders.map((g) => ({ name: g.name, type: g.type, ...grade(g, run) }));
+  const run = runClaude(c.prompt, { maxTurns: c.fm.max_turns ?? 10, timeoutSeconds: c.fm.timeout_seconds ?? 300, allowedTools: [...disc.tools, "Skill"] });
+  const graders = run.failed
+    ? [{ name: "run-completed", type: "run", passed: false, details: run.failure }]
+    : c.graders.map((g) => ({ name: g.name, type: g.type, ...grade(g, run) }));
   const passed = graders.every((g) => g.passed);
   out.aggregates[passed ? "passCount" : "failCount"]++;
   out.aggregates.costUsd += run.costUsd ?? 0;
