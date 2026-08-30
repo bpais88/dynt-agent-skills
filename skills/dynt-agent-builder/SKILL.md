@@ -22,7 +22,8 @@ metadata:
 - Protected-resource metadata: `https://api.dynt.ai/.well-known/oauth-protected-resource`
 - Tool catalogue (JSON Schema): `https://api.dynt.ai/v1/public/agent-tools/spec`
   and `/hash` for cheap change detection. `references/tools.md` in this skill is
-  generated from it.
+  generated from it; `references/gated-tools.md` lists tools that exist but are
+  switched on per environment — check the server's tool list before relying on them.
 
 ## Authentication
 

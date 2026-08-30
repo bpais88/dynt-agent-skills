@@ -1,6 +1,6 @@
 # Dynt MCP tools (generated)
 
-Source: https://dynt-server-sandbox.onrender.com/v1/public/agent-tools/spec · catalogue hash `53c32498f0379ce87a8f7356c03c472f9c2798fb5c9f155efeb989b75c77b87f` · 25 tools. Do not edit by hand — run `npm run generate:tools`.
+Source: https://api.dynt.ai/v1/public/agent-tools/spec · catalogue hash `d7b12eb344d7fbb69884582bef4dc28c755be03eb16db96f8ffbee27d6febf95` · 23 tools. Do not edit by hand — run `npm run generate:tools`.
 
 | Tool | CLI | Access | Read-only | Destructive | Purpose |
 |---|---|---|---|---|---|
@@ -12,8 +12,6 @@ Source: https://dynt-server-sandbox.onrender.com/v1/public/agent-tools/spec · c
 | `get_email_attachment` | `dynt email attachment` | email:read | yes | no | Download one bounded attachment (by messageId and attachmentId from search_user_email) as base64 |
 | `search_user_email` | `dynt email search` | email:read | yes | no | Search the organization's connected Gmail inbox for receipts, invoices, plan confirmations and billing alerts |
 | `list_expenses` | `dynt expenses list` | read | yes | no | List reimbursable employee expenses with status, category, amount, submitter and date |
-| `list_findings` | `dynt findings list` | read | yes | no | List what needs the user's attention, ordered by money at stake: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it |
-| `update_finding` | `dynt findings update` | write | no | no | Record the user's decision on one finding: snoozed (deal with it later, until a date), resolved (handled), or not_a_problem (the detection was wrong here — this teaches the detector for this organization) |
 | `get_current_user` | `dynt identity whoami` | read | yes | no | Return the identity behind the current credential: userId, organizationId, role and granted permissions |
 | `list_invoices` | `dynt invoices list` | read | yes | no | List outgoing customer invoices with status, customer, amount, currency, issue and due date |
 | `list_merchants` | `dynt merchants list` | read | yes | no | List merchants with their category and transaction counts; filter by name |
@@ -97,27 +95,6 @@ List reimbursable employee expenses with status, category, amount, submitter and
 | `employeeId` | string | no | Filter by employee/submitter |
 | `limit` | integer | no |  |
 | `cursor` | integer | no |  |
-
-### `list_findings`
-
-List what needs the user's attention, ordered by money at stake: duplicate charges, subscription price increases, subscriptions that stopped charging, clusters of missing receipts. Each finding has a one-sentence evidence title, a confidence (0–1), the amount at stake in EUR and the transaction ids behind it. Use when the user asks what needs attention, where money is leaking, whether anything is wrong, or for a weekly review — call it first and do not recompute these from list_transactions. Do not use for data-quality anomalies like duplicate merchants (use list_anomalies). Returns open findings by default; expired snoozes count as open.
-
-| Input | Type | Required | Description |
-|---|---|---|---|
-| `status` | array | no | Default: open (including snoozes that have expired). |
-| `type` | array | no |  |
-| `limit` | integer | no |  |
-
-### `update_finding`
-
-Record the user's decision on one finding: snoozed (deal with it later, until a date), resolved (handled), or not_a_problem (the detection was wrong here — this teaches the detector for this organization). Use when the user has said what they want done with a finding from list_findings. Do not mark not_a_problem on your own judgement, and do not use it to change transactions (it only changes the finding's status). Returns the finding's new status.
-
-| Input | Type | Required | Description |
-|---|---|---|---|
-| `findingId` | string | yes |  |
-| `status` | string (open|snoozed|resolved|not_a_problem) | yes | snoozed = deal with it later (needs snoozedUntil); not_a_problem = the detection was wrong for this organization; resolved = handled. |
-| `snoozedUntil` | string | no | YYYY-MM-DD, required when status is snoozed |
-| `resolution` | string | no |  |
 
 ### `get_current_user`
 
