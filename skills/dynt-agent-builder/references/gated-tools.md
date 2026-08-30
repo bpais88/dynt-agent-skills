@@ -17,8 +17,8 @@ List what needs the user's attention, ordered by money at stake: duplicate charg
 
 | Input | Type | Required | Description |
 |---|---|---|---|
-| `status` | array | no | Default: open (including snoozes that have expired). |
-| `type` | array | no |  |
+| `status` | array of enum(open \| snoozed \| resolved \| not_a_problem) | no | Default: open (including snoozes that have expired). |
+| `type` | array of enum(duplicate_charge \| price_increase \| subscription_stopped \| unused_subscription \| missing_receipt_cluster \| unusual_charge) | no |  |
 | `limit` | integer | no |  |
 
 ### `update_finding`
