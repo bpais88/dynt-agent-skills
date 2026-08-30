@@ -91,4 +91,4 @@ Install any of them with `npx skills add bpais88/dynt-agent-skills --skill <name
 - Findings (when the server offers them): `list_findings` (read, ordered by money at stake) · `update_finding` (write: snoozed / resolved / not_a_problem — only after the user decided; never mark not_a_problem on your own)
 - Suggestions (write): `accept_all_category_suggestions`, `accept_all_merchant_suggestions`
 
-Full inputs and CLI equivalents: `dynt-agent-builder/references/tools.md`.
+Full inputs and CLI equivalents: `dynt-agent-builder/references/tools.md` (production catalogue) and `dynt-agent-builder/references/gated-tools.md` (tools enabled per environment, such as findings).

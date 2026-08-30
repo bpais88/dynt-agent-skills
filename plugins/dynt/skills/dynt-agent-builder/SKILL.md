@@ -53,5 +53,7 @@ A token or key always acts as **one member in one organization**. Roles
 
 ## Reference
 
-See `references/tools.md` for every tool, its access level, annotations and
-inputs — regenerated from the live catalogue.
+See `references/tools.md` for every production tool, its access level, annotations and
+inputs — regenerated from the live catalogue. `references/gated-tools.md` documents,
+in the same detail, tools that exist behind a server flag and are not on
+api.dynt.ai yet; check the server's tool list before relying on them.
