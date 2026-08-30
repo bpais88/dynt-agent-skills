@@ -4,7 +4,9 @@
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { execSync } from "node:child_process";
 const skills = readdirSync("skills");
-const tools = new Set([...readFileSync("skills/dynt-agent-builder/references/tools.md", "utf8").matchAll(/^\| `([a-z_]+)` \|/gm)].map((m) => m[1]));
+const toolNames = (file) => existsSync(file) ? [...readFileSync(file, "utf8").matchAll(/^\| `([a-z_]+)` \|/gm)].map((m) => m[1]) : [];
+// Production catalogue plus tools that are gated per environment (documented separately, on purpose).
+const tools = new Set([...toolNames("skills/dynt-agent-builder/references/tools.md"), ...toolNames("skills/dynt-agent-builder/references/gated-tools.md")]);
 let failed = false;
 for (const name of skills) {
   const p = `skills/${name}/SKILL.md`;
