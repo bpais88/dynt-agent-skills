@@ -44,7 +44,7 @@ scripts/                generate tools reference · sync plugins · validate
 
 ```bash
 npm install
-npm run generate:tools   # refresh references/tools.md from https://api.dynt.ai/v1/public/agent-tools/spec
+npm run generate:tools   # refresh references/tools.md from https://api.dynt.ai/mcp/catalog/spec
 npm run sync:plugins     # vendor skills into plugins/dynt
 npm run validate:ci      # frontmatter, tool references, skills-ref, plugin drift
 ```
