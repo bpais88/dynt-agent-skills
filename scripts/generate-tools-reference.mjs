@@ -1,11 +1,11 @@
 // Regenerates skills/dynt-agent-builder/references/tools.md from the live tool
 // catalogue so the skills can never drift from what the MCP server exposes.
 import { writeFileSync, mkdirSync } from "node:fs";
-const SPEC = process.env.DYNT_SPEC_URL || "https://api.dynt.ai/v1/public/agent-tools/spec";
+const SPEC = process.env.DYNT_SPEC_URL || "https://api.dynt.ai/mcp/catalog/spec";
 // Tools that exist but are gated off in production (feature flags) are documented
 // separately, from the environment where they are on, so tools.md always says
 // exactly what api.dynt.ai serves.
-const GATED_SPEC = process.env.DYNT_GATED_SPEC_URL || "https://dynt-server-sandbox.onrender.com/v1/public/agent-tools/spec";
+const GATED_SPEC = process.env.DYNT_GATED_SPEC_URL || "https://dynt-server-sandbox.onrender.com/mcp/catalog/spec";
 const fetchSpec = async (url) => (await fetch(url, { headers: { "user-agent": "dynt-agent-skills/tools-ref" } })).json();
 const spec = await fetchSpec(SPEC);
 /** One summary row per tool; the same shape in both references. */
@@ -73,7 +73,7 @@ try {
   const extra = gated.tools.filter((t) => !prodNames.has(t.name));
   const g = [
     "# Gated Dynt MCP tools (generated)", "",
-    `Not on \`${SPEC.replace(/\/v1.*$/, "")}\` yet — enabled per environment behind a server flag. Source: ${GATED_SPEC} · ${extra.length} tool(s). Do not edit by hand — run \`npm run generate:tools\`.`, "",
+    `Not on \`${new URL(SPEC).origin}\` yet — enabled per environment behind a server flag. Source: ${GATED_SPEC} · ${extra.length} tool(s). Do not edit by hand — run \`npm run generate:tools\`.`, "",
     "Skills may mention these with the wording \"when the server offers it\"; check the tool list at runtime before relying on them.", "",
     ...summaryTable(extra),
     ...inputSections(extra),
